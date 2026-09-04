@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>公文审核写作 · 风险词核稿</title>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --ink: #1c1915;
+      --red: #8b1e1e;
+      --gold: #b0892a;
+      --card: #fffdf8;
+      --line: #d9d0c1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Songti SC", "SimSun", "Noto Serif SC", serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    header {
+      background: #3d1f1f;
+      color: #f7efd8;
+      padding: 28px 24px 22px;
+      border-bottom: 4px solid var(--gold);
+    }
+    header h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: 0.12em; font-weight: 700; }
+    header p { margin: 0; font-size: 13px; opacity: 0.85; }
+    main { max-width: 1100px; margin: 0 auto; padding: 20px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 860px) { .row { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 13px; margin-bottom: 6px; color: #5a4e3e; }
+    select, textarea, button {
+      width: 100%;
+      font-family: inherit;
+    }
+    select {
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+    textarea {
+      min-height: 320px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      font-size: 15px;
+      line-height: 1.7;
+      resize: vertical;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 16px;
+      background: #3d1f1f;
+      color: #f7efd8;
+      border: 0;
+      cursor: pointer;
+      letter-spacing: 0.2em;
+    }
+    button:hover { background: #5a2a2a; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 14px 16px;
+      margin-top: 16px;
+    }
+    .badge { display: inline-block; padding: 2px 8px; font-size: 12px; border: 1px solid var(--gold); color: var(--red); margin-right: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 8px 6px; vertical-align: top; }
+    th { color: #5a4e3e; font-weight: 600; }
+    .hit { background: #f8e6e6; }
+    footer { text-align: center; font-size: 12px; color: #7a6e5e; padding: 24px; }
+    a { color: var(--red); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>公文审核写作助手</h1>
+    <p>3.3 完善版 · 风险词扫描 · 建议表达对照 · 不替代会签审批与保密审查</p>
+  </header>
+  <main>
+    <div class="row">
+      <div>
+        <label for="level">任务级别</label>
+        <select id="level">
+          <option value="C">C 类 · 轻度审查</option>
+          <option value="B" selected>B 类 · 中度审查</option>
+          <option value="A">A 类 · 全量审查</option>
+        </select>
+        <label for="draft" style="margin-top:12px">粘贴文稿</label>
+        <textarea id="draft" placeholder="在此粘贴请示、报告、整改、汇报等文稿……"></textarea>
+        <button type="button" id="scan">核稿扫描</button>
+      </div>
+      <div>
+        <div class="card" id="summary">
+          <span class="badge" id="flag">待扫描</span>
+          <span id="summaryText">粘贴文稿后点击“核稿扫描”。命中触发词将提示提升审查等级。</span>
+        </div>
+        <div class="card">
+          <table>
+            <thead>
+              <tr><th>原词</th><th>表</th><th>建议表达</th></tr>
+            </thead>
+            <tbody id="hits">
+              <tr><td colspan="3">暂无命中</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:#7a6e5e;margin-top:18px">
+      完整规则见仓库 <a href="../docs/handbook.md">docs/handbook.md</a> · 词表 <a href="../data/risk-words.json">data/risk-words.json</a>
+    </p>
+  </main>
+  <footer>稳中有力 · 先把风险看明白，再谈文字怎么写</footer>
+  <script>
+    const fallback = { triggers: {}, tables: [] };
+    async function loadDict() {
+      try {
+        const res = await fetch("../data/risk-words.json");
+        if (!res.ok) throw new Error("fetch");
+        return await res.json();
+      } catch (e) {
+        return fallback;
+      }
+    }
+    function collectItems(dict) {
+      const items = [];
+      (dict.tables || []).forEach((t) => {
+        (t.items || []).forEach((it) => {
+          items.push({ from: it.from, to: it.to, table: t.name, boundary: t.boundary });
+        });
+      });
+      items.sort((a, b) => b.from.length - a.from.length);
+      return items;
+    }
+    function scanTriggers(text, dict) {
+      const hits = [];
+      const trig = dict.triggers || {};
+      Object.keys(trig).forEach((k) => {
+        trig[k].forEach((w) => {
+          if (w && text.includes(w)) hits.push({ type: k, word: w });
+        });
+      });
+      return hits;
+    }
+    document.getElementById("scan").addEventListener("click", async () => {
+      const dict = await loadDict();
+      const text = document.getElementById("draft").value || "";
+      const level = document.getElementById("level").value;
+      const tbody = document.getElementById("hits");
+      if (!text.trim()) {
+        document.getElementById("flag").textContent = "空稿";
+        document.getElementById("summaryText").textContent = "请先粘贴文稿。";
+        tbody.innerHTML = "<tr><td colspan='3'>暂无命中</td></tr>";
+        return;
+      }
+      const trig = scanTriggers(text, dict);
+      const items = collectItems(dict);
+      const found = [];
+      const seen = new Set();
+      items.forEach((it) => {
+        if (text.includes(it.from) && !seen.has(it.from)) {
+          seen.add(it.from);
+          found.push(it);
+        }
+      });
+      let flag = "✅ 未命中词表高频风险词";
+      let note = "仍须对照文种、权限、数据与程序清单人工复核。";
+      if (found.length || trig.length) {
+        flag = "⚠️ 命中风险表述";
+        note = "建议按对照表降格，并回查是否仍过满、过重、过空。";
+        if (trig.length && level !== "A") {
+          note += " 已命中速查触发词，建议审查等级提升一级。";
+        }
+      }
+      document.getElementById("flag").textContent = flag;
+      document.getElementById("summaryText").textContent =
+        "当前级别 " + level + "。触发 " + trig.length + " 类/词，对照表命中 " + found.length + " 条。" + note;
+      if (!found.length) {
+        tbody.innerHTML = "<tr><td colspan='3'>暂无对照表命中</td></tr>";
+      } else {
+        tbody.innerHTML = found
+          .map(
+            (it) =>
+              "<tr class='hit'><td>" +
+              it.from +
+              "</td><td>" +
+              it.table +
+              "</td><td>" +
+              it.to +
+              "<div style='color:#7a6e5e;font-size:12px;margin-top:4px'>" +
+              (it.boundary || "") +
+              "</div></td></tr>"
+          )
+          .join("");
+      }
+    });
+  </script>
+</body>
+</html>
