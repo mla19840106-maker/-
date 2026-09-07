@@ -1,0 +1,21 @@
+# Local editor / OS artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Python tooling
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# Do not commit credentials or local environment files
+.env
+.env.*
+
+# Local-only working material. This is NOT a confidentiality control.
+# Already tracked files are not protected by these ignore rules.
+/private/
+/workpapers/

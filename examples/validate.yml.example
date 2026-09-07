@@ -1,0 +1,30 @@
+# Example only: GitHub Actions does not load this file from examples/.
+# An authorized maintainer may copy it to .github/workflows/validate.yml.
+# Keep this example file; the local documentation validator checks for it.
+
+name: Validate prompt repository
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Check documents and prompt structure
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate documents
+        run: python3 scripts/validate.py
+      - name: Test validator
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
