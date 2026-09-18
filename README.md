@@ -29,6 +29,8 @@ curl -s https://raw.githubusercontent.com/mla19840106-maker/-/main/prompts/promp
 │   ├── 精简版-快速调用.md                  # 精简版一键复制
 │   ├── prompt.json                         # 结构化元数据
 │   └── README.md                           # prompts 说明
+├── reports/
+│   └── OPC创新发展工作传达报告.md          # 基于示例报道形成的公司内部传达报告
 └── README.md                               # 本文件
 ```
 
