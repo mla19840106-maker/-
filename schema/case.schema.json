@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/mla19840106-maker/-/schema/case.schema.json",
+  "title": "历史抉择案例",
+  "type": "object",
+  "required": ["id", "title", "actors", "era", "source", "kernel", "situation", "options", "choice", "reasoning", "outcome", "original_text", "insight", "risks", "keywords"],
+  "properties": {
+    "id": { "type": "string", "description": "唯一标识，如 shiji-hanxin-kuaxia" },
+    "title": { "type": "string", "description": "案例标题" },
+    "actors": { "type": "array", "items": { "type": "string" }, "description": "决策当事人" },
+    "era": { "type": "string", "description": "时代，如 秦末汉初" },
+    "source": {
+      "type": "object",
+      "required": ["book", "chapter"],
+      "properties": {
+        "book": { "type": "string", "enum": ["史记", "资治通鉴"] },
+        "chapter": { "type": "string", "description": "卷/篇名，如 淮阴侯列传 / 卷六十五·汉纪五十七" }
+      }
+    },
+    "kernel": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["忍辱蓄势", "进退去留", "站队择主", "关键决断", "用人识人", "高风险押注", "信息采信", "过度自信", "纳谏倾听", "顾全大局", "变革树敌", "功高震主", "利益与底线"]
+      },
+      "minItems": 1,
+      "description": "场景内核，第一个为主内核"
+    },
+    "situation": { "type": "string", "description": "当时局面：约束、筹码、时间窗口" },
+    "options": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["option", "assessment"],
+        "properties": {
+          "option": { "type": "string", "description": "当时真实存在的选项" },
+          "assessment": { "type": "string", "description": "该选项当时可见的收益与风险" }
+        }
+      }
+    },
+    "choice": { "type": "string", "description": "实际选择" },
+    "reasoning": { "type": "string", "description": "当事人的判断依据（明说的+可推知的）" },
+    "outcome": {
+      "type": "object",
+      "required": ["short_term", "long_term"],
+      "properties": {
+        "short_term": { "type": "string" },
+        "long_term": { "type": "string", "description": "终局" }
+      }
+    },
+    "original_text": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["quote", "citation"],
+        "properties": {
+          "quote": { "type": "string", "description": "原文引文" },
+          "citation": { "type": "string", "description": "书名·卷/篇" }
+        }
+      }
+    },
+    "insight": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "规律启发" },
+    "risks": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "迁移到现代场景的风险提醒/适用边界" },
+    "modern_scenarios": { "type": "array", "items": { "type": "string" }, "description": "典型现代对应场景" },
+    "paired_cases": { "type": "array", "items": { "type": "string" }, "description": "对照案例 id（结果相反或同构）" },
+    "keywords": { "type": "array", "items": { "type": "string" }, "description": "检索关键词（含现代词汇）" }
+  }
+}
