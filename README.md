@@ -1,6 +1,6 @@
 # 鉴史决策 · 人生抉择推演技能库
 
-![Cases](https://img.shields.io/badge/案例-29（史记 19＋通鉴 10）-8B1A1A)
+![Cases](https://img.shields.io/badge/案例-29（史记19＋通鉴10）-8B1A1A)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 > 以《史记》《资治通鉴》为母本的结构化历史决策案例库 + 检索推演引擎。
