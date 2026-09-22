@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>砾鉴 · 以史记、资治通鉴打磨抉择</title>
+  <meta name="description" content="从《史记》《资治通鉴》中检索场景内核相似的历史抉择，拆解判断与结果，给出规律启发与风险提醒。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <div class="brand-col">
+    <span>史记 · 资治通鉴</span>
+    <strong>砾鉴</strong>
+    <span>史为镜，非卜筮</span>
+  </div>
+  <div class="frame">
+    <header class="top">
+      <div>
+        <div class="seal">砾</div>
+      </div>
+      <div style="flex:1">
+        <h1>砾鉴</h1>
+        <p class="sub">以《史记》《资治通鉴》为砾，打磨当下抉择</p>
+      </div>
+      <div class="meta">
+        场景内核检索<br />原文出处 · 判断 · 结果<br />规律启发 · 风险提醒
+      </div>
+    </header>
+
+    <section class="ask">
+      <div class="paper">
+        <label>问策</label>
+        <textarea id="q" placeholder="陈述你的处境与两难。不必求文采，求具体：你在什么位置，对方是谁，窗口还开着吗，最坏是什么，可逆吗。"></textarea>
+        <div class="ask-bar">
+          <span class="hint">Ctrl / ⌘ + Enter 取砾</span>
+          <button class="btn" id="go" type="button">取砾</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="chips" id="chips"></div>
+
+    <section class="grains-pick">
+      <h2>或先点纹理</h2>
+      <div id="grains"></div>
+    </section>
+
+    <div class="status" id="status"></div>
+
+    <div id="result" class="hidden">
+      <p class="weak-note hidden" id="weak">内核信号弱，下列为字面近似，请改写处境或点选纹理。</p>
+      <div class="kernel-row" id="kernels"></div>
+      <div class="pebbles" id="pebbles"></div>
+      <div class="detail" id="detail"></div>
+      <div class="counsel" id="counsel"></div>
+    </div>
+
+    <p class="foot-note">
+      史为镜，非卜筮。砾石打磨抉择，并不代替抉择。案例经过结构化改写，原文据通行本，个别通鉴段落为便于对照而节录、标点。
+    </p>
+  </div>
+  <script src="js/engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
