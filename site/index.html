@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>鉴史决策 · 案例浏览器</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <h1>鉴史决策 <span>案例浏览器</span></h1>
+      <p id="stats" class="stats"></p>
+    </div>
+    <div class="searchline">
+      <input id="search" type="search" placeholder="搜索：处境、人物、关键词……（按 / 聚焦）">
+      <div id="bookSeg" class="seg">
+        <button data-book="">全部</button>
+        <button data-book="史记">史记</button>
+        <button data-book="资治通鉴">资治通鉴</button>
+      </div>
+    </div>
+    <div id="kernels" class="chips"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p id="count" class="count"></p>
+  <div id="grid" class="grid"></div>
+</main>
+
+<footer>
+  <div class="wrap">数据：cases/*.json · 本页由 scripts/build_site.py 生成 ·
+    <a href="https://github.com/mla19840106-maker/-" target="_blank" rel="noopener">GitHub 仓库</a> · MIT License</div>
+</footer>
+
+<div id="modal">
+  <div id="modalCard">
+    <button id="modalClose" aria-label="关闭">×</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<noscript>本页需要启用 JavaScript。</noscript>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

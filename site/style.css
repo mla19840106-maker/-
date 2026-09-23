@@ -1,0 +1,190 @@
+:root {
+  --paper: #f6f1e7;
+  --paper-deep: #efe7d6;
+  --card: #fffdf7;
+  --ink: #2b2620;
+  --ink-soft: #6b6152;
+  --line: #e2d7c0;
+  --accent: #9e2b25;      /* 朱砂 */
+  --accent-deep: #8b1a1a;
+  --indigo: #1f4e79;      /* 黛蓝（通鉴） */
+  --quote-bg: #f3ecdb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", serif;
+  line-height: 1.75;
+}
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+/* ---------- 头部 ---------- */
+header {
+  background: var(--paper-deep);
+  border-bottom: 3px double var(--accent-deep);
+  padding: 26px 0 18px;
+}
+.brand h1 {
+  margin: 0;
+  font-size: 30px;
+  letter-spacing: 4px;
+  font-weight: 700;
+}
+.brand h1 span { font-size: 17px; color: var(--accent); letter-spacing: 6px; margin-left: 10px; }
+.stats { margin: 6px 0 0; color: var(--ink-soft); font-size: 13px; }
+
+.searchline { display: flex; gap: 12px; margin: 16px 0 12px; flex-wrap: wrap; }
+#search {
+  flex: 1 1 320px;
+  padding: 10px 16px;
+  font: inherit;
+  font-size: 15px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  outline: none;
+}
+#search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(158, 43, 37, .12); }
+
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--card); }
+.seg button {
+  border: 0; background: transparent; padding: 10px 16px;
+  font: inherit; font-size: 14px; cursor: pointer; color: var(--ink-soft);
+  border-right: 1px solid var(--line);
+}
+.seg button:last-child { border-right: 0; }
+.seg button.on { background: var(--accent-deep); color: #fff; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  border-radius: 999px; padding: 5px 13px; font: inherit; font-size: 13px; cursor: pointer;
+}
+.chip .n { color: var(--ink-soft); font-size: 12px; }
+.chip:hover { border-color: var(--accent); }
+.chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip.on .n { color: rgba(255, 255, 255, .8); }
+
+/* ---------- 主体 ---------- */
+main { padding: 20px 0 50px; }
+.count { color: var(--ink-soft); font-size: 13px; margin: 4px 0 12px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px 18px 14px;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(60, 45, 20, .12); }
+.card h3 { margin: 8px 0 4px; font-size: 17px; line-height: 1.5; }
+.card .meta { margin: 0 0 8px; color: var(--ink-soft); font-size: 12.5px; }
+.card .sit { margin: 0 0 10px; font-size: 13.5px; color: var(--ink); opacity: .88; }
+
+.card .head { display: flex; align-items: center; justify-content: space-between; }
+.era { color: var(--ink-soft); font-size: 12px; }
+.book {
+  display: inline-block; font-size: 12px; color: #fff;
+  padding: 2px 9px; border-radius: 4px; letter-spacing: 2px;
+}
+.book.s { background: var(--accent-deep); }
+.book.t { background: var(--indigo); }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tags span {
+  background: rgba(158, 43, 37, .07); color: var(--accent-deep);
+  border: 1px solid rgba(158, 43, 37, .25);
+  font-size: 12px; padding: 2px 10px; border-radius: 999px;
+}
+
+.empty {
+  grid-column: 1 / -1; text-align: center; color: var(--ink-soft);
+  padding: 60px 0; font-size: 15px;
+}
+
+/* ---------- 详情浮层 ---------- */
+#modal {
+  display: none; position: fixed; inset: 0; z-index: 50;
+  background: rgba(24, 18, 10, .55);
+}
+#modal.open { display: block; }
+#modalCard {
+  position: relative; margin: 4vh auto; width: min(880px, 94vw);
+  max-height: 90vh; overflow-y: auto;
+  background: #fbf7ee; border: 1px solid var(--line); border-radius: 12px;
+  padding: 28px 34px 34px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
+}
+#modalClose {
+  position: sticky; top: 0; float: right;
+  border: 0; background: transparent; font-size: 26px; cursor: pointer;
+  color: var(--ink-soft); line-height: 1;
+}
+#modalClose:hover { color: var(--accent); }
+.mhead h2 { margin: 10px 0 4px; font-size: 24px; letter-spacing: 1px; }
+.mhead .meta { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+.mhead .meta2 { margin: 4px 0 10px; color: var(--ink-soft); font-size: 13.5px; }
+
+.ghost {
+  font: inherit; font-size: 13px; cursor: pointer;
+  border: 1px solid var(--accent); color: var(--accent); background: transparent;
+  border-radius: 8px; padding: 5px 14px; margin-top: 6px;
+}
+.ghost:hover { background: var(--accent); color: #fff; }
+
+#modalBody section { margin-top: 22px; }
+#modalBody h4 {
+  margin: 0 0 8px; font-size: 15.5px; color: var(--accent-deep);
+  padding-left: 10px; border-left: 3px solid var(--accent);
+}
+#modalBody p { margin: 0 0 8px; font-size: 14.5px; }
+#modalBody ul { margin: 0; padding-left: 22px; font-size: 14.5px; }
+#modalBody ul li { margin-bottom: 6px; }
+
+blockquote {
+  margin: 0 0 12px; padding: 10px 16px;
+  background: var(--quote-bg); border-left: 3px solid var(--accent);
+  font-size: 14.5px;
+}
+blockquote footer { margin-top: 6px; color: var(--ink-soft); font-size: 13px; text-align: right; }
+
+ul.opts { list-style: none; padding-left: 0; }
+ul.opts li {
+  margin-bottom: 10px; padding: 10px 14px;
+  background: var(--quote-bg); border-radius: 8px;
+}
+ul.opts li b { display: block; font-size: 14.5px; }
+ul.opts li span { display: block; font-size: 13.5px; color: var(--ink-soft); margin-top: 3px; }
+
+.pairs { display: flex; flex-wrap: wrap; gap: 8px; }
+.pair {
+  font: inherit; font-size: 13px; cursor: pointer;
+  border: 1px dashed var(--indigo); color: var(--indigo); background: transparent;
+  border-radius: 999px; padding: 4px 14px;
+}
+.pair:hover { background: var(--indigo); color: #fff; }
+
+/* ---------- 页脚 ---------- */
+footer {
+  border-top: 1px solid var(--line);
+  padding: 18px 0 26px; color: var(--ink-soft); font-size: 12.5px;
+}
+footer a { color: var(--indigo); }
+
+@media (max-width: 720px) {
+  .grid { grid-template-columns: 1fr; }
+  #modalCard { margin: 0; width: 100vw; max-height: 100vh; height: 100vh; border-radius: 0; padding: 20px 18px 30px; }
+  .brand h1 { font-size: 24px; }
+}

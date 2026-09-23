@@ -38,7 +38,10 @@ python3 scripts/validate.py
 # 3. 冒烟测试：确认新案例能被检索到
 python3 scripts/advisor.py "一个贴近该案例的现代处境描述"
 
-# 4. 提交 PR
+# 4. 更新网页版浏览器数据（site/data.js）
+python3 scripts/build_site.py
+
+# 5. 提交 PR
 ```
 
 若仓库已启用 CI（`.github/workflows/ci.yml`，见工作区模板，可在 GitHub 网页端添加启用），

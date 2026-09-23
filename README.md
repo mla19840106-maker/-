@@ -25,6 +25,8 @@
 .
 ├── README.md                 # 本文件
 ├── SKILL.md                  # LLM Agent 技能说明书（可直接挂载使用）
+├── CONTRIBUTING.md           # 贡献指南（选案标准、引文规范、提交流程）
+├── LICENSE                   # MIT
 ├── docs/
 │   └── decision-kernels.md   # 场景内核分类体系（13 类抉择原型）
 ├── schema/
@@ -33,7 +35,12 @@
 │   ├── shiji-*.json          #   《史记》案例
 │   └── tongjian-*.json       #   《资治通鉴》案例
 ├── scripts/
-│   └── advisor.py            # 检索推演引擎（Python 3，零第三方依赖）
+│   ├── advisor.py            # 检索推演引擎（零第三方依赖）
+│   ├── validate.py           # 案例数据校验器（CI 同款检查）
+│   └── build_site.py         # 网页版浏览器数据打包器
+├── site/                     # 网页版案例浏览器（纯静态、零构建）
+│   ├── index.html / app.js / style.css
+│   └── data.js               # 由 scripts/build_site.py 生成
 └── examples/
     └── demo-report.md        # 示例推演报告
 ```
@@ -52,7 +59,21 @@ python3 scripts/advisor.py --list
 
 # 4. 输出 markdown 报告文件
 python3 scripts/advisor.py "要不要拿全部积蓄创业" -o report.md
+
+# 5. 网页版案例浏览器（纯静态、零构建）
+python3 scripts/build_site.py            # 从 cases/ 重新生成 site/data.js（仓库已预生成）
+python3 -m http.server 8080 -d site      # 浏览器打开 http://localhost:8080
+                                         # 或直接双击 site/index.html（file:// 下同样可用）
 ```
+
+**网页版支持**：全文搜索（处境/人物/关键词）、13 内核筛选、底本切换、八段式详情浮层、
+成对案例互跳、一键复制单案 Markdown 报告，链接可分享（状态存于 URL hash）。
+
+## 数据质量与 CI
+
+- `python3 scripts/validate.py`：结构 / 内核枚举 / 引文完整性 / paired_cases 悬空引用 / README 同步核对；
+- `.github/workflows/ci.yml`（模板在工作区，于 GitHub 网页端创建同名文件即可启用）：
+  PR 自动跑校验器 + 引擎冒烟测试。
 
 ## 案例的拆解结构（每案八段式）
 
